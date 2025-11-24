@@ -1,0 +1,98 @@
+Oke! Berikut **daftar semua fitur dan perubahan penting** dari versi final bot Discord `Yuka` yang sudah kita buat, termasuk integrasi database, multi-API, dan keamanan `.env`:
+
+---
+
+## **1. Fitur Bot Dasar**
+
+1. **Command utama `!yuka <pertanyaan>`**
+
+   * Bot merespons pertanyaan user menggunakan AI.
+   * Multi-turn context: menyimpan 5 pertanyaan terakhir untuk memberikan jawaban yang lebih relevan.
+
+2. **Command tambahan**:
+
+   * `!ping` → Mengecek latency bot.
+   * `!help` → Menampilkan daftar command.
+   * `!history` → Menampilkan 10 pertanyaan terakhir user dalam embed.
+
+---
+
+## **2. Multi-API Support**
+
+1. Mendukung lebih dari 1 API AI.
+2. Jika API pertama limit atau error, bot **otomatis beralih ke API berikutnya**.
+3. Retry otomatis hingga 3 kali sebelum pindah ke API lain.
+4. Menangani error rate-limit (429) dan timeout (ConnectTimeoutError).
+
+---
+
+## **3. Database & History**
+
+1. **SQLite** digunakan untuk menyimpan history user:
+
+   * Table `history(userId, question, answer, createdAt)`
+2. Embed history otomatis **truncate ≤ 4000 karakter** agar tidak error Discord.
+3. Bisa menampilkan history multi-turn hingga 10 pertanyaan terakhir.
+
+---
+
+## **4. Rate-limit User**
+
+1. Setiap user hanya bisa memanggil `!yuka` setiap 10 detik.
+2. Jika user memanggil terlalu cepat, bot memberikan peringatan sisa waktu.
+
+---
+
+## **5. Multi-turn Context**
+
+1. Bot menyimpan konteks 5 pertanyaan terakhir user saat membalas pertanyaan baru.
+2. Membuat jawaban AI lebih relevan dan natural.
+
+---
+
+## **6. Console Logging Aman**
+
+1. Hanya mencatat command atau mention bot, **tidak log semua pesan pengguna**.
+2. Memudahkan monitoring bot tanpa melanggar privasi user.
+
+---
+
+## **7. Embed & Tampilan Pesan**
+
+1. History user ditampilkan menggunakan `EmbedBuilder` dengan judul, warna, dan timestamp.
+2. Teks history panjang otomatis **truncate ≤ 4000 karakter**.
+3. Memastikan Discord tidak menolak pesan karena terlalu panjang.
+
+---
+
+## **8. Keamanan & Deployment**
+
+1. Semua token dan API key disimpan di **file `.env`**:
+
+   * `DISCORD_TOKEN`
+   * `OPENROUTER_API_KEY`
+   * `AI2_API_KEY`
+2. Menggunakan package `dotenv` untuk memuat variabel lingkungan.
+3. `.env` bisa diganti kapan saja tanpa mengubah kode.
+
+---
+
+## **9. Error Handling**
+
+1. Menangani `uncaughtException` dan `unhandledRejection` global agar bot tidak crash.
+2. Menangani error streaming, parsing SSE, timeout, dan limit API.
+3. Memberikan pesan ke channel jika semua API gagal.
+
+---
+
+## **10. Fitur Tambahan / Opsional**
+
+1. Bisa menambahkan lebih banyak API AI di array `AI_APIS` untuk redundansi.
+2. Bisa upgrade history embed menjadi **multi-page embed** jika ingin menampilkan lebih dari 10 pertanyaan.
+3. Timeout request ke AI di-set 20 detik untuk menghindari hang.
+
+---
+
+Jika mau, aku bisa buatkan **versi diagram atau tabel ringkas** supaya kamu bisa langsung dicatat dengan visual yang rapi.
+
+Apakah mau aku buatkan versi visual itu juga?

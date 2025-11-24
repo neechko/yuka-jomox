@@ -1,0 +1,6 @@
+# Sensitive files
+*.env
+token.txt
+plan.txt
+test_token.js
+log.txt
